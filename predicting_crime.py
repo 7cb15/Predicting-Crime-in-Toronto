@@ -1,12 +1,4 @@
 
-#PROJECT: PREDICTING TYPE OF CRIME IN TORONTO
-
-
-#Notes: 
-
-#Approach is to numeric encode the data set and run a RF model to see performance and then to create a second data set
-#that is one-hot encoded to test it's performance on the same model. 
-
 #--------------------------------------------------#
 
 #1) IMPORT LIBRARIES
