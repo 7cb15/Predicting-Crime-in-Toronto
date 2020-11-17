@@ -1,5 +1,7 @@
-
 #--------------------------------------------------#
+
+
+
 
 #1) IMPORT LIBRARIES
 
@@ -23,7 +25,100 @@ from sklearn.metrics import confusion_matrix, classification_report, accuracy_sc
 #2) DATA IMPORT AND PRE-PROCESSING
 
 #import full data set
-df = pd.read_csv('MCI_2014_to_2017.csv',sep=',') 
+# data=pd.read_csv("D:\\dataset\\Crime\\Merged_data_crime.csv")
+
+df = pd.read_csv('D:\\ved\\dataset\\Crime\\Merged_data_crime.csv') 
+
+
+# Lets understand how's our data
+# columns and datatypes
+print(df.dtypes)
+
+# to get more idea about na values
+print(df.isna().sum())
+
+# once we get idea about na values we can drop it.it would give results
+df = df.dropna(axis=0)
+
+
+
+# to know min,max,mean about columns
+
+print(df.describe())
+
+
+
+# This is bar plot which tells about how occurrencehour is related to crime
+# on x axis--> grouped hours
+# on Y-axis-->crime count
+
+hour_freq=pd.DataFrame(df.groupby(['occurrencehour']).size())
+count_column = list(hour_freq.iloc[:, 0])
+second_column=[str(i-2)+"-"+str(i) for i in range(2,24,3)]
+count_frq=[]
+for i in range(0,22,3):
+    temp=count_column[i]+count_column[i+1]+count_column[i+2]
+    count_frq.append(temp)
+
+
+
+
+import matplotlib.pyplot as plt
+fig = plt.figure()
+ax = fig.add_axes([1,1,1,1])
+day_time = second_column
+commied_crime = count_frq
+ax.bar(day_time,commied_crime)
+plt.show()
+
+
+
+
+# This is bar plot which tells about how occurrencemonth is related to crime
+# on x axis--> months
+# on Y-axis-->crime count
+
+month_freq=pd.DataFrame(df.groupby(['occurrencemonth']).size())
+month_count = list(month_freq.iloc[:, 0])
+mon_second_column=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sept","Oct","Nov","Dec"]
+
+
+
+import matplotlib.pyplot as plt
+fig = plt.figure()
+ax = fig.add_axes([1,1,1,1])
+# day_time = second_column
+# commied_crime = count_frq
+ax.bar(mon_second_column,month_count)
+plt.show()
+
+
+# This is bar plot which tells about how occurrenceyear is related to crime
+# on x axis--> year
+# on Y-axis-->crime count
+
+# we can use linear regression to predict crime count in current year
+
+year_freq=pd.DataFrame(df.groupby(['occurrenceyear']).size())
+year_count = list(year_freq.iloc[:, 0])
+year_second_column=[str(i) for i in range(2000,2020)]
+
+
+
+import matplotlib.pyplot as plt
+fig = plt.figure()
+ax = fig.add_axes([2,2,2,2])
+# day_time = second_column
+# commied_crime = count_frq
+ax.bar(year_second_column,year_count)
+# ax.bar(year_count,year_second_column)
+plt.show()
+
+
+
+
+
+
 
 #list of relevant columns for model
 col_list = ['occurrenceyear',	'occurrencemonth','occurrenceday','occurrencedayofyear','occurrencedayofweek','occurrencehour','MCI',	'Division',	'Hood_ID','premisetype']
@@ -98,7 +193,7 @@ definition_list_dayyear = dayyear_var[1]
 #set X and Y:
 
 X = df2.drop(['MCI'],axis=1).values #sets x and converts to an array
-print(X.head())
+# print(X.head())
 
 y = df2['MCI'].values #sets y and converts to an array
 
@@ -161,3 +256,10 @@ y_pred_OH = grad_class.predict(X_test_OH) # Predicting the Test set results
 print(accuracy_score(y_test_OH, y_pred_OH)) #modest improvement to 0.648
 print(confusion_matrix(y_test_OH, y_pred_OH)) 
 print(classification_report(y_test_OH,y_pred_OH, target_names=definition_list_MCI)) 
+
+
+
+# We have Homicides dataset too ,so we can take that dataset also.
+# we can take mode of all model result ,It probably give the better accuracy .
+# In short it would be great if we calculate results by considering all models.
+# Thanking you
